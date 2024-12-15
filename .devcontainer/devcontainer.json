@@ -3,28 +3,21 @@
 {
 	"name": "Node.js & TypeScript",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bullseye",
 	"features": {
-		"ghcr.io/devcontainers/features/github-cli:1": {}
-	},
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"esbenp.prettier-vscode",
-				"dbaeumer.vscode-eslint",
-				"GitHub.copilot",
-				"GitHub.copilot-chat",
-				"MS-CEINTL.vscode-language-pack-ja"
-			]
-		}
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/r3dpoint/devcontainer-features/tailwindcss-standalone-cli:1": {},
+		"ghcr.io/devcontainers-community/npm-features/typescript:1": {},
+		"ghcr.io/jayree/devcontainer-features/npm-registry:1": {}
 	},
 
-	"postCreateCommand": [
-		"mkdir -p ~/.ssh",
-		"echo '${localEnv.SSH_PRIVATE_KEY}' > ~/.ssh/id_rsa",
-		"chmod 600 ~/.ssh/id_rsa",
-		"ssh-keyscan github.com >> ~/.ssh/known_hosts"
-	  ]
+	"mounts": [
+		{
+			"source": "/mnt/c/Users/PC_User/.ssh",
+			"target": "/home/node/.ssh",
+			"type": "bind"
+		}
+	],
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -33,11 +26,11 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "yarn install",
+	"postCreateCommand": "chmod 600 /home/node/.ssh/id_ed25519 && eval $(ssh-agent -s) && ssh-add /home/node/.ssh/id_ed25519",
 
 	// Configure tool-specific properties.
 	// "customizations": {},
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+	"remoteUser": "node"
 }
